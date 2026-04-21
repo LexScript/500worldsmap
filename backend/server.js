@@ -73,7 +73,7 @@ module.exports = class Server {
             }
         )
 
-        this.server.listen(this.port, () => {
+        this.server.listen(this.port, '0.0.0.0', () => {
             console.log(`läuft auf http://localhost:${this.port}`)
         })
     }
