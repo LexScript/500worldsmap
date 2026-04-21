@@ -1,0 +1,131 @@
+html, body {
+    min-height: 100%;
+    min-width: 100%;
+    padding: 0;
+    margin: 0;
+    background: #0a0a0f;
+}
+
+#map-container {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    cursor: grab;
+}
+
+#map {
+    background: url('/map.webp') no-repeat;
+    background-size: contain;
+    background-position: top left;
+
+    width: 4096px;
+    height: 2728px;
+
+    position: relative;
+
+    transform-origin: top left;
+}
+
+#app {
+    background: url('/background.png') no-repeat;
+    background-size: cover;
+    opacity: 1;
+    transition: opacity 1s;
+}
+
+.fade-out {
+    opacity: 0 !important;
+    transition: opacity 1s;
+}
+
+/*OVERLAY*/
+.world-box {
+    position: absolute;
+    width: 6.6%;
+    height:11%;
+    /*background: red;*/
+    /*color: white;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 12px;
+}
+
+.power-level {
+    /*background: #fff;*/
+    position: absolute;
+    width: 31.3%;
+    height: 19%;
+    display: flex;
+    align-items: center;
+}
+
+/*LOADING INDICATOR*/
+#indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.sigil {
+    width: 120px;
+    height: 120px;
+    border: 3px solid #6b0f0f;
+    border-radius: 50%;
+    position: relative;
+    animation: rotate 4s linear infinite;
+    box-shadow:
+            0 0 10px #6b0f0f,
+            inset 0 0 20px #2a0000;
+}
+
+
+.sigil::before {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #8b0000, transparent 70%);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.sigil::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    border: 1px dashed #aa0000;
+    opacity: 0.6;
+    animation: rotateReverse 6s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes rotateReverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(0.8);
+        opacity: 0.6;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
