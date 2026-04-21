@@ -18,8 +18,23 @@ window.definitions = {
         {id: 13, name: 'Ikaron Prime', system: 'Ikaron', position: {x: 3029.21, y: 2117.93}, infrastructure: 3}
     ],
     factions: [
-        {id: 1, name: 'Imperium', color: '#3864ce'},
-        {id: 1, name: 'Marauders', color: '#6eea66'},
-        {id: 1, name: 'Chaos', color: '#ca1c1c'},
+        {
+            id: 1,
+            name: 'Imperium',
+            color: '#3864ce',
+            ships: [{id: 1, player: 'Dima', img: 'dima.png'}, {id: 2, player: 'Nick', img: 'nick.png'}]
+        },
+        {
+            id: 2,
+            name: 'Marauders',
+            color: '#6eea66',
+            ships: [{id: 3, player: 'Alex', img: 'alex.png'}, {id: 4, player: 'Volkan', img: 'volkan.png'}]
+        },
+        {
+            id: 3,
+            name: 'Chaos',
+            color: '#ca1c1c',
+            ships: [{id: 5, player: 'Te-Yun', img: 'teyun.png'}, {id: 6, player: 'Falk', img: 'falk.png'}]
+        },
     ]
 }

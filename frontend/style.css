@@ -38,6 +38,38 @@ html, body {
     transition: opacity 1s;
 }
 
+/*SHIPS*/
+.ship {
+    width: 300px;
+    height: 150px;
+    position: absolute;
+}
+
+.ship-glow {
+    position: absolute;
+    left: 45%;
+    top: 50%;
+
+    width: 150px;
+    height: 150px;
+
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    filter: blur(25px);
+
+    pointer-events: none;
+    z-index: 1;
+}
+
+.ship-image {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: relative;
+    z-index: 2;
+}
+
 /*OVERLAY*/
 .world-box {
     position: absolute;
@@ -54,12 +86,15 @@ html, body {
 
 .power-level {
     /*background: #fff;*/
+    opacity: 0.5;
     position: absolute;
     width: 31.3%;
     height: 19%;
     display: flex;
     align-items: center;
 }
+
+
 
 /*LOADING INDICATOR*/
 #indicator {

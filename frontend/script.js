@@ -1,6 +1,19 @@
 class Worlds {
     constructor() {
+        const url = new URL(window.location.href)
+
         this.data = null;
+        this.edit = url.searchParams.get("edit") === "true"
+
+        this.scale = 1
+
+        this.isDraggingShip = false
+        this.isDraggingMap = false;
+
+        // ship dragging stuff
+        this.activeShip = null
+        this.shipOffsetX = 0
+        this.shipOffsetY = 0
     }
 
     async init() {
@@ -14,19 +27,17 @@ class Worlds {
         const container = document.getElementById('map-container')
         const map = document.getElementById('map')
 
-        let scale = 1
         const minScale = 0.2
         const maxScale = 4
 
         let offsetX = 0
         let offsetY = 0
 
-        let isDragging = false
         let startX = 0
         let startY = 0
 
         const update = () => {
-            map.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`
+            map.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${this.scale})`
         }
 
         container.addEventListener('wheel', (e) => {
@@ -37,18 +48,18 @@ class Worlds {
             const mouseY = e.clientY - rect.top
 
             const zoomFactor = 0.1
-            const oldScale = scale
+            const oldScale = this.scale
 
             if (e.deltaY < 0) {
-                scale += zoomFactor
+                this.scale += zoomFactor
             } else {
-                scale -= zoomFactor
+                this.scale -= zoomFactor
             }
 
-            scale = Math.max(minScale, Math.min(maxScale, scale))
-            if (scale === oldScale) return
+            this.scale = Math.max(minScale, Math.min(maxScale, this.scale))
+            if (this.scale === oldScale) return
 
-            const scaleRatio = scale / oldScale
+            const scaleRatio = this.scale / oldScale
 
             offsetX = mouseX - (mouseX - offsetX) * scaleRatio
             offsetY = mouseY - (mouseY - offsetY) * scaleRatio
@@ -57,19 +68,20 @@ class Worlds {
         }, {passive: false})
 
         container.addEventListener('mousedown', (e) => {
-            isDragging = true
+            if (this.isDraggingShip) return
+            this.isDraggingMap = true
             startX = e.clientX - offsetX
             startY = e.clientY - offsetY
             container.style.cursor = 'grabbing'
         })
 
         window.addEventListener('mouseup', () => {
-            isDragging = false
+            this.isDraggingMap = false
             container.style.cursor = 'grab'
         })
 
         window.addEventListener('mousemove', (e) => {
-            if (!isDragging) return
+            if (!this.isDraggingMap) return
 
             offsetX = e.clientX - startX
             offsetY = e.clientY - startY
@@ -87,7 +99,105 @@ class Worlds {
         this.draw();
     }
 
-    draw() {
+    hexToRgb(hex) {
+        hex = hex.replace('#', '')
+
+        const bigint = parseInt(hex, 16)
+        const r = (bigint >> 16) & 255
+        const g = (bigint >> 8) & 255
+        const b = bigint & 255
+
+        return `${r}, ${g}, ${b}`
+    }
+
+
+    drawShips() {
+        const map = document.getElementById('map')
+
+        map.querySelectorAll('.ship').forEach(e => e.remove())
+
+        const factions = window.definitions.factions
+
+        factions.forEach(faction => {
+            faction.ships.forEach(shipData => {
+                const currentShipPos = this.data.ships.find(shipPos => shipPos.id === shipData.id)
+                const shipObject = document.createElement('div');
+                shipObject.style.left = currentShipPos.x + 'px';
+                shipObject.style.top = currentShipPos.y + 'px';
+                shipObject.title = shipData.player;
+                shipObject.className = 'ship';
+
+                const glow = document.createElement('div');
+                glow.className = 'ship-glow';
+                glow.style.background = `radial-gradient(circle, rgba(${this.hexToRgb(faction.color)}, 1) 0%, transparent 100%)`
+                shipObject.appendChild(glow);
+
+                const shipImage = document.createElement('div');
+                shipImage.style.backgroundImage = `url(spaceships/${shipData.img})`;
+                shipImage.className = 'ship-image';
+                shipObject.appendChild(shipImage);
+
+                if (this.edit) {
+                    this.isDraggingShip = false
+                    let offsetX = 0
+                    let offsetY = 0
+
+                    shipObject.addEventListener('mousedown', (e) => {
+
+                        this.isDraggingShip = true
+
+                        const rect = shipObject.getBoundingClientRect()
+                        this.shipOffsetX = (e.clientX - rect.left) / this.scale
+                        this.shipOffsetY = (e.clientY - rect.top) / this.scale
+
+                        this.activeShip = {
+                            el: shipObject,
+                            id: shipData.id
+                        }
+
+                        e.stopPropagation()
+                        shipObject.style.cursor = 'grabbing'
+                    })
+
+                    window.addEventListener('mousemove', (e) => {
+                        if (!this.isDraggingShip || !this.activeShip) return
+
+                        const mapRect = map.getBoundingClientRect()
+
+                        const x = (e.clientX - mapRect.left) / this.scale - this.shipOffsetX
+                        const y = (e.clientY - mapRect.top) / this.scale - this.shipOffsetY
+
+                        this.activeShip.el.style.left = x + 'px'
+                        this.activeShip.el.style.top = y + 'px'
+                    })
+
+                    window.addEventListener('mouseup', async () => {
+                        if (!this.isDraggingShip || !this.activeShip) return
+
+                        const {el, id} = this.activeShip
+
+                        const finalX = parseFloat(el.style.left)
+                        const finalY = parseFloat(el.style.top)
+
+                        const ship = this.data.ships.find(s => s.id === id)
+                        ship.x = finalX
+                        ship.y = finalY
+
+                        this.activeShip = null
+                        this.isDraggingShip = false
+
+                        await this.save()
+                    })
+
+                    shipObject.style.cursor = this.edit ? 'grab' : 'default'
+                }
+
+                map.appendChild(shipObject)
+            })
+        })
+    }
+
+    drawPowerLevel() {
         const map = document.getElementById('map')
 
         map.querySelectorAll('.world-box').forEach(e => e.remove())
@@ -112,7 +222,10 @@ class Worlds {
                         powerLevelBox.style.background = faction.color
                     }
 
-                    powerLevelBox.onclick = () => this.setpowerLevel(world.name, faction.name, 4 - i)
+                    if (this.edit) {
+                        powerLevelBox.onclick = () => this.setpowerLevel(world.name, faction.name, 4 - i)
+                    }
+
 
                     box.appendChild(powerLevelBox);
                 }
@@ -120,6 +233,11 @@ class Worlds {
 
             map.appendChild(box)
         })
+    }
+
+    draw() {
+        this.drawPowerLevel();
+        this.drawShips();
     }
 
     async save() {
