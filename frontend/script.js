@@ -20,7 +20,14 @@ class Worlds {
         this.initNavigation()
         await this.load()
         this.draw()
+        this.bindToggleTablet()
         return;
+    }
+
+    bindToggleTablet() {
+        document.getElementById('tablet').addEventListener('click', () => {
+            document.getElementById('tablet').classList.toggle('tablet-open');
+        })
     }
 
     initNavigation() {
@@ -199,6 +206,23 @@ class Worlds {
 
     drawPowerLevel() {
         const map = document.getElementById('map')
+        const powerlevel = {
+            imperium: 0,
+            marauders: 0,
+            chaos: 0
+        }
+
+        for (let world in this.data) {
+            if (world !== 'ships') {
+                const worldData = this.data[world]
+                powerlevel.imperium += worldData.powerLevel.Imperium
+                powerlevel.marauders += worldData.powerLevel.Marauders
+                powerlevel.chaos += worldData.powerLevel.Chaos
+            }
+        }
+        document.getElementById('score-imperium-current').innerText = powerlevel.imperium
+        document.getElementById('score-marauders-current').innerText = powerlevel.marauders
+        document.getElementById('score-chaos-current').innerText = powerlevel.chaos
 
         map.querySelectorAll('.world-box').forEach(e => e.remove())
 

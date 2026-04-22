@@ -38,6 +38,34 @@ html, body {
     transition: opacity 1s;
 }
 
+/*TABLET*/
+.tablet {
+    width: 600px;
+    height: 300px;
+    position: fixed;
+    top: 20%;
+    right: -880px;
+    background: url('/tablet.png') no-repeat;
+    background-size: cover;
+    z-index: 9;
+    color: greenyellow;
+    padding: 190px;
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    font-size: 25px;
+    text-align: left;
+    transition: right 0.5s;
+}
+
+.tablet-open {
+    right: 0;
+    transition: right 0.5s;
+}
+
+.tablet td, .tablet th {
+    white-space: nowrap;
+    padding: 10px;
+}
+
 /*SHIPS*/
 .ship {
     width: 300px;
