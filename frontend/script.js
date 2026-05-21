@@ -45,10 +45,13 @@ class Worlds {
                 wrapper.className = 'infrastructure';
                 wrapper.style.background = f.color;
                 wrapper.innerHTML = `<img src="infrastructure/${infra}.svg" alt="${infra}" title="${infra.toUpperCase()}">`
-                wrapper.onclick = async (event) => {
-                    await this.setInfrastructure(this.editInfrastructure.world, this.editInfrastructure.pos, infra, f.name);
-                    document.querySelector('#edit-infrastructure').style.display = 'none'
+                if (this.edit) {
+                    wrapper.onclick = async (event) => {
+                        await this.setInfrastructure(this.editInfrastructure.world, this.editInfrastructure.pos, infra, f.name);
+                        document.querySelector('#edit-infrastructure').style.display = 'none'
+                    }
                 }
+
                 td.appendChild(wrapper)
                 tr.appendChild(td)
             })
