@@ -45,12 +45,11 @@ class Worlds {
                 wrapper.className = 'infrastructure';
                 wrapper.style.background = f.color;
                 wrapper.innerHTML = `<img src="infrastructure/${infra}.svg" alt="${infra}" title="${infra.toUpperCase()}">`
-                if (this.edit) {
-                    wrapper.onclick = async (event) => {
-                        await this.setInfrastructure(this.editInfrastructure.world, this.editInfrastructure.pos, infra, f.name);
-                        document.querySelector('#edit-infrastructure').style.display = 'none'
-                    }
+                wrapper.onclick = async (event) => {
+                    await this.setInfrastructure(this.editInfrastructure.world, this.editInfrastructure.pos, infra, f.name);
+                    document.querySelector('#edit-infrastructure').style.display = 'none'
                 }
+
 
                 td.appendChild(wrapper)
                 tr.appendChild(td)
@@ -306,9 +305,11 @@ class Worlds {
                 infrastructureBox.setAttribute('data-world', world.name)
                 infrastructureBox.style.left = (166.5 + (i * 28)) + '%'
 
-                infrastructureBox.onclick = () => {
-                    this.editInfrastructure = {pos: i + 1, world: world.name}
-                    document.querySelector('#edit-infrastructure').style.display = 'block'
+                if (this.edit) {
+                    infrastructureBox.onclick = () => {
+                        this.editInfrastructure = {pos: i + 1, world: world.name}
+                        document.querySelector('#edit-infrastructure').style.display = 'block'
+                    }
                 }
 
                 box.appendChild(infrastructureBox);
