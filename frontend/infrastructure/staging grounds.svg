@@ -1,0 +1,34 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hintergrund -->
+  <circle cx="128" cy="128" r="124" fill="transparent"></circle>
+
+  <!-- Äußerer Ring -->
+  <circle cx="128" cy="128" r="114" fill="none" stroke="white" stroke-width="8"></circle>
+
+  <!-- Sterne/Kreuze -->
+  <g fill="white">
+    <!-- oben rechts -->
+    <g transform="translate(178 54)">
+      <rect x="-8" y="-28" width="16" height="56" rx="3"></rect>
+      <rect x="-28" y="-8" width="56" height="16" rx="3"></rect>
+    </g>
+
+    <!-- mitte -->
+    <g transform="translate(128 106)">
+      <rect x="-8" y="-28" width="16" height="56" rx="3"></rect>
+      <rect x="-28" y="-8" width="56" height="16" rx="3"></rect>
+    </g>
+
+    <!-- unten -->
+    <g transform="translate(124 180)">
+      <rect x="-8" y="-28" width="16" height="56" rx="3"></rect>
+      <rect x="-28" y="-8" width="56" height="16" rx="3"></rect>
+    </g>
+
+    <!-- links -->
+    <g transform="translate(70 150)">
+      <rect x="-8" y="-28" width="16" height="56" rx="3"></rect>
+      <rect x="-28" y="-8" width="56" height="16" rx="3"></rect>
+    </g>
+  </g>
+</svg>

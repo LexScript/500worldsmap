@@ -1,0 +1,29 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hintergrund -->
+  <circle cx="128" cy="128" r="124" fill="transparent"></circle>
+
+  <!-- Äußerer Ring -->
+  <circle cx="128" cy="128" r="110" fill="none" stroke="white" stroke-width="10"></circle>
+
+  <!-- Zahnrad -->
+  <g fill="white">
+    <!-- Zähne -->
+    <rect x="118" y="28" width="20" height="30" rx="2"></rect>
+    <rect x="118" y="198" width="20" height="30" rx="2"></rect>
+
+    <rect x="198" y="118" width="30" height="20" rx="2"></rect>
+    <rect x="28" y="118" width="30" height="20" rx="2"></rect>
+
+    <rect x="176" y="46" width="20" height="30" rx="2" transform="rotate(45 186 61)"></rect>
+    <rect x="60" y="180" width="20" height="30" rx="2" transform="rotate(45 70 195)"></rect>
+
+    <rect x="180" y="176" width="20" height="30" rx="2" transform="rotate(135 190 191)"></rect>
+    <rect x="46" y="60" width="20" height="30" rx="2" transform="rotate(135 56 75)"></rect>
+  </g>
+
+  <!-- Zahnrad-Kreis -->
+  <circle cx="128" cy="128" r="68" fill="none" stroke="white" stroke-width="22"></circle>
+
+  <!-- Innerer Kreis -->
+  <circle cx="128" cy="128" r="34" fill="white"></circle>
+</svg>

@@ -1,0 +1,23 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- äußerer Ring -->
+  <circle cx="128" cy="128" r="114" fill="none" stroke="#ffffff" stroke-width="8"></circle>
+
+  <!-- obere Kugel -->
+  <circle cx="128" cy="48" r="14" fill="#ffffff"></circle>
+
+  <!-- Verbindung oben -->
+  <path d="M128 62 L92 118 H164 Z" fill="none" stroke="#ffffff" stroke-width="8" stroke-linejoin="round"></path>
+
+  <!-- Schale -->
+  <path d="M48 96 H208
+           A80 80 0 0 1 48 96 Z" fill="#ffffff"></path>
+
+  <!-- untere Verbindung -->
+  <line x1="128" y1="176" x2="128" y2="210" stroke="#ffffff" stroke-width="10" stroke-linecap="round"></line>
+
+  <!-- mittlere Kugel -->
+  <circle cx="128" cy="184" r="14" fill="#ffffff"></circle>
+
+  <!-- untere Kugel -->
+  <circle cx="128" cy="228" r="14" fill="#ffffff"></circle>
+</svg>

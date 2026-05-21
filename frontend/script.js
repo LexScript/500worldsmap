@@ -14,11 +14,15 @@ class Worlds {
         this.activeShip = null
         this.shipOffsetX = 0
         this.shipOffsetY = 0
+
+        // infrastructure editing stuff
+        this.editInfrastructure = null;
     }
 
     async init() {
         this.initNavigation()
         await this.load()
+        this.initInfrastructureDialog()
         this.draw()
         this.bindToggleTablet()
         return;
@@ -28,6 +32,28 @@ class Worlds {
         document.getElementById('tablet').addEventListener('click', () => {
             document.getElementById('tablet').classList.toggle('tablet-open');
         })
+    }
+
+    initInfrastructureDialog() {
+        const infraPopup = document.querySelector('#edit-infrastructure');
+        const tbody = infraPopup.querySelector('tbody')
+        window.definitions.factions.forEach((f) => {
+            const tr = document.createElement('tr');
+            window.definitions.infrastructure.forEach((infra, i) => {
+                const td = document.createElement('td');
+                const wrapper = document.createElement('div');
+                wrapper.className = 'infrastructure';
+                wrapper.style.background = f.color;
+                wrapper.innerHTML = `<img src="infrastructure/${infra}.svg" alt="${infra}" title="${infra.toUpperCase()}">`
+                wrapper.onclick = async (event) => {
+                    await this.setInfrastructure(this.editInfrastructure.world, this.editInfrastructure.pos, infra, f.name);
+                    document.querySelector('#edit-infrastructure').style.display = 'none'
+                }
+                td.appendChild(wrapper)
+                tr.appendChild(td)
+            })
+            tbody.appendChild(tr)
+        });
     }
 
     initNavigation() {
@@ -101,6 +127,20 @@ class Worlds {
 
     async setpowerLevel(worldName, factionName, powerLevel) {
         this.data[worldName].powerLevel[factionName] = powerLevel;
+        await this.save();
+        await this.load()
+        this.draw();
+    }
+
+    async setInfrastructure(worldName, position, infrastructureName, factionName) {
+        console.log(worldName, position, infrastructureName, factionName)
+        while (position > this.data[worldName].infrastructure.length) {
+            this.data[worldName].infrastructure.push({})
+        }
+        this.data[worldName].infrastructure[position - 1] = {
+            faction: factionName,
+            type: infrastructureName,
+        };
         await this.save();
         await this.load()
         this.draw();
@@ -204,7 +244,7 @@ class Worlds {
         })
     }
 
-    drawPowerLevel() {
+    drawWorld() {
         const map = document.getElementById('map')
         const powerlevel = {
             imperium: 0,
@@ -225,6 +265,7 @@ class Worlds {
         document.getElementById('score-chaos-current').innerText = powerlevel.chaos
 
         map.querySelectorAll('.world-box').forEach(e => e.remove())
+        map.querySelectorAll('.infrastructure').forEach(e => e.remove())
 
         const worlds = window.definitions.worlds
 
@@ -255,12 +296,41 @@ class Worlds {
                 }
             });
 
+            for (let i = 0; i < world.infrastructure; i++) {
+                const infrastructureBox = document.createElement('div');
+                infrastructureBox.className = `infrastructure`;
+                infrastructureBox.setAttribute('data-pos', i + 1)
+                infrastructureBox.setAttribute('data-world', world.name)
+                infrastructureBox.style.left = (166.5 + (i * 28)) + '%'
+
+                infrastructureBox.onclick = () => {
+                    this.editInfrastructure = {pos: i + 1, world: world.name}
+                    document.querySelector('#edit-infrastructure').style.display = 'block'
+                }
+
+                box.appendChild(infrastructureBox);
+            }
+
+            this.data[world.name].infrastructure.forEach((infrastructure, i) => {
+                const infrastructureIcon = document.createElement('div');
+                if (infrastructure.faction) {
+                    infrastructureIcon.style.background = window.definitions.factions.find(f => {
+                        return f.name === infrastructure.faction
+                    }).color;
+                    infrastructureIcon.innerHTML = `<img src="infrastructure/${infrastructure.type}.svg" alt="${infrastructure.type}">`;
+                    infrastructureIcon.title = infrastructure.type.toUpperCase();
+
+                    box.querySelector(`.infrastructure[data-pos="${i + 1}"]`).appendChild(infrastructureIcon);
+                }
+            })
+
+
             map.appendChild(box)
         })
     }
 
     draw() {
-        this.drawPowerLevel();
+        this.drawWorld();
         this.drawShips();
     }
 
@@ -285,6 +355,7 @@ class Worlds {
 
         setTimeout(() => {
             document.getElementById('app').classList.remove('fade-out');
+            document.getElementById('indicator').style.display = 'none';
         }, 1000)
     }
 };

@@ -1,0 +1,35 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- äußerer Ring -->
+  <circle cx="128" cy="128" r="114" fill="none" stroke="#ffffff" stroke-width="8"></circle>
+
+  <!-- untere Form -->
+  <path d="
+    M20 150
+    H70
+    L86 182
+    H170
+    L186 150
+    H236
+    L236 132
+    H196
+    L180 164
+    H76
+    L60 132
+    H20
+    Z" fill="#ffffff"></path>
+
+  <!-- obere Verbindung -->
+  <rect x="118" y="104" width="20" height="48" rx="6" fill="#ffffff"></rect>
+
+  <!-- obere Form -->
+  <path d="
+    M92 54
+    H164
+    L176 68
+    V100
+    L164 114
+    H92
+    L80 100
+    V68
+    Z" fill="#ffffff"></path>
+</svg>
